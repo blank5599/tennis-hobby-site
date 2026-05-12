@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/테니스취미사이트.html"
+    }
+  ]
+}
