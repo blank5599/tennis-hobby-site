@@ -1,0 +1,1350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>테니스 취미 노트</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --green:    #1C3424;
+      --g-mid:    #2C5240;
+      --g-lt:     #E3ECE6;
+      --accent:   #527A62;
+      --clay:     #A45534;
+      --clay-lt:  #F0E5DE;
+      --hard:     #2C4A68;
+      --hard-lt:  #DDE6F0;
+      --grass:    #2A4E22;
+      --grass-lt: #E6EEE2;
+      --gold:     #BFA048;
+      --gray-dk:  #1C2420;
+      --gray-md:  #546258;
+      --gray-lt:  #8A9486;
+      --bg:       #ECEEE9;
+      --white:    #F8F8F5;
+      --border:   #D2D8CE;
+      --shadow:   0 2px 14px rgba(0,0,0,0.07);
+    }
+    body { font-family:'Noto Sans KR',sans-serif; background:var(--bg); color:var(--gray-dk); min-height:100vh; }
+
+    /* ─ HEADER ─ */
+    .site-header { background:linear-gradient(135deg,#1C3424 0%,#2C5240 65%,#3A6650 100%); padding:0 40px; display:flex; align-items:center; height:66px; position:sticky; top:0; z-index:200; box-shadow:0 2px 20px rgba(0,0,0,.22); }
+    .h-logo { display:flex; align-items:center; gap:12px; }
+    .h-logo-icon { width:42px; height:42px; border-radius:50%; background:rgba(255,255,255,.15); border:1.5px solid rgba(255,255,255,.3); display:flex; align-items:center; justify-content:center; font-size:22px; }
+    .h-logo-nm  { font-size:18px; font-weight:700; color:#fff; letter-spacing:-0.02em; }
+    .h-logo-sub { font-size:10px; font-weight:300; color:rgba(255,255,255,.55); letter-spacing:.08em; }
+    .h-right { margin-left:auto; display:flex; align-items:center; gap:14px; }
+    .h-badge { font-size:11px; font-weight:700; padding:4px 12px; border-radius:100px; color:var(--green); background:#fff; }
+    .h-date  { font-size:12px; color:rgba(255,255,255,.65); border-left:1px solid rgba(255,255,255,.2); padding-left:16px; }
+
+    /* ─ TAB NAV ─ */
+    .tab-nav { background:var(--white); border-bottom:1px solid var(--border); padding:0 40px; display:flex; position:sticky; top:66px; z-index:199; box-shadow:0 1px 4px rgba(0,0,0,.05); overflow-x:auto; }
+    .tab-btn { display:flex; align-items:center; gap:7px; padding:15px 20px; font-size:13px; font-weight:500; color:var(--gray-md); border:none; background:none; cursor:pointer; letter-spacing:.02em; border-bottom:2.5px solid transparent; transition:color .2s,border-color .2s; white-space:nowrap; font-family:inherit; }
+    .tab-btn:hover  { color:var(--g-mid); }
+    .tab-btn.active { color:var(--g-mid); border-bottom-color:var(--accent); font-weight:700; }
+
+    /* ─ SUB NAV ─ */
+    .sub-nav { display:flex; gap:8px; margin-bottom:22px; flex-wrap:wrap; }
+    .sub-btn { border:1.5px solid var(--border); background:none; cursor:pointer; padding:7px 18px; border-radius:100px; font-size:13px; font-weight:500; color:var(--gray-md); font-family:inherit; transition:all .2s; }
+    .sub-btn:hover  { border-color:var(--accent); color:var(--g-mid); }
+    .sub-btn.active { background:var(--g-mid); color:#fff; border-color:var(--g-mid); font-weight:700; }
+
+    /* ─ PANELS ─ */
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+    .sub-panel { display:none; }
+    .sub-panel.active { display:block; }
+
+    /* ─ COMMON ─ */
+    .cont { max-width:1080px; margin:0 auto; padding:28px 24px 72px; }
+    .sec-label { font-size:10px; font-weight:700; color:var(--g-mid); letter-spacing:.22em; text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .sec-label::after { content:""; flex:1; height:1px; background:var(--border); }
+    .card { background:var(--white); border-radius:14px; box-shadow:var(--shadow); padding:22px; }
+
+    /* ─ BADGES ─ */
+    .ct-hard  { background:var(--hard-lt); color:var(--hard);  font-size:11px; font-weight:700; padding:2px 9px; border-radius:4px; }
+    .ct-clay  { background:var(--clay-lt); color:var(--clay);  font-size:11px; font-weight:700; padding:2px 9px; border-radius:4px; }
+    .ct-grass { background:var(--grass-lt);color:var(--grass); font-size:11px; font-weight:700; padding:2px 9px; border-radius:4px; }
+    .diff { font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; white-space:nowrap; }
+    .d-begin { background:var(--hard-lt); color:var(--hard); }
+    .d-mid   { background:#F2E8DC; color:#8A4520; }
+    .d-adv   { background:var(--clay-lt); color:var(--clay); }
+
+    /* ══ TAB 1: 기초 & 스킬 ══ */
+    .court-row { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-bottom:24px; }
+    .court-card { border-radius:14px; padding:20px 22px; border-left:4px solid; }
+    .court-card.hard  { background:var(--hard-lt); border-color:var(--hard); }
+    .court-card.clay  { background:var(--clay-lt); border-color:var(--clay); }
+    .court-card.grass { background:var(--grass-lt);border-color:var(--grass); }
+    .cc-icon  { font-size:28px; margin-bottom:10px; }
+    .cc-title { font-size:15px; font-weight:700; margin-bottom:6px; }
+    .cc-desc  { font-size:13px; color:var(--gray-md); line-height:1.7; }
+    .cc-gs    { display:flex; gap:5px; margin-top:10px; flex-wrap:wrap; }
+    .gs-pill  { font-size:11px; font-weight:600; padding:2px 9px; border-radius:100px; background:rgba(0,0,0,.08); }
+
+    .score-card { background:var(--white); border-radius:14px; padding:24px; box-shadow:var(--shadow); }
+    .score-steps { display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin:14px 0; }
+    .score-step { text-align:center; padding:14px 8px; background:var(--g-lt); border-radius:10px; }
+    .score-num { font-size:22px; font-weight:900; color:var(--g-mid); }
+    .score-lbl { font-size:11px; color:var(--gray-md); margin-top:4px; }
+    .score-info { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+    .score-info-item { background:var(--bg); border-radius:10px; padding:14px 16px; }
+    .sci-title { font-size:12px; font-weight:700; margin-bottom:6px; color:var(--g-mid); }
+    .sci-desc  { font-size:12px; color:var(--gray-md); line-height:1.7; }
+
+    .stance-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:24px; }
+    .stance-card { background:var(--white); border-radius:14px; padding:20px; box-shadow:var(--shadow); display:flex; gap:14px; }
+    .sc-icon  { font-size:34px; flex-shrink:0; }
+    .sc-nm    { font-size:15px; font-weight:700; margin-bottom:2px; }
+    .sc-en    { font-size:11px; color:var(--gray-lt); letter-spacing:.05em; margin-bottom:8px; }
+    .sc-pts   { list-style:none; }
+    .sc-pts li { font-size:13px; color:var(--gray-md); line-height:1.7; padding-left:14px; position:relative; }
+    .sc-pts li::before { content:"·"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+
+    .grip-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:24px; }
+    .grip-card { background:var(--white); border-radius:12px; padding:18px 14px; box-shadow:var(--shadow); text-align:center; border-top:3px solid var(--accent); }
+    .gc-icon { font-size:28px; margin-bottom:8px; }
+    .gc-nm   { font-size:13px; font-weight:700; margin-bottom:4px; }
+    .gc-en   { font-size:10px; color:var(--gray-lt); margin-bottom:8px; }
+    .gc-desc { font-size:12px; color:var(--gray-md); line-height:1.6; text-align:left; }
+
+    .stroke-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .stroke-card { background:var(--white); border-radius:14px; padding:22px; box-shadow:var(--shadow); border-top:3px solid var(--accent); transition:transform .15s,box-shadow .2s; }
+    .stroke-card:hover { transform:translateY(-2px); box-shadow:0 6px 20px rgba(0,0,0,.12); }
+    .sk-top  { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .sk-icon { font-size:26px; }
+    .sk-nm   { font-size:15px; font-weight:700; margin-bottom:2px; }
+    .sk-en   { font-size:11px; color:var(--gray-lt); letter-spacing:.04em; margin-bottom:10px; }
+    .sk-pts  { list-style:none; }
+    .sk-pts li { font-size:13px; color:var(--gray-md); line-height:1.7; padding-left:14px; position:relative; }
+    .sk-pts li::before { content:"·"; position:absolute; left:0; color:var(--accent); font-weight:700; }
+    .sk-tip  { margin-top:10px; padding:9px 12px; background:var(--g-lt); border-radius:8px; font-size:12px; color:var(--g-mid); line-height:1.6; }
+    .sk-tip::before { content:"💡 "; }
+
+    /* ══ TAB 2: 랭킹 ══ */
+    .rank-wrap { background:var(--white); border-radius:14px; box-shadow:var(--shadow); overflow:hidden; margin-bottom:20px; }
+    table.rtbl { width:100%; border-collapse:collapse; }
+    .rtbl th { padding:12px 16px; font-size:10px; font-weight:700; color:var(--g-mid); letter-spacing:.12em; text-transform:uppercase; background:var(--g-lt); text-align:left; }
+    .rtbl th.r, .rtbl td.r { text-align:right; }
+    .rtbl td { padding:12px 16px; font-size:13px; border-top:1px solid var(--border); vertical-align:middle; }
+    .rtbl tbody tr:hover { background:#F9FBF9; }
+    .rn { display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; border-radius:8px; font-size:13px; font-weight:700; background:var(--g-lt); color:var(--g-mid); }
+    .rn.g { background:#F5EDD8; color:#BFA048; border:1.5px solid #BFA048; }
+    .rn.s { background:#ECEFF1; color:#78909C; border:1.5px solid #78909C; }
+    .rn.b { background:#EFEBE9; color:#8D6E63; border:1.5px solid #A1887F; }
+    .p-nm  { font-weight:600; font-size:14px; }
+    .p-nat { font-size:11px; color:var(--gray-lt); }
+    .pts   { font-size:13px; font-weight:700; color:var(--g-mid); }
+    .form-dots { display:flex; gap:3px; align-items:center; }
+    .fd { width:8px; height:8px; border-radius:50%; }
+    .fd.w { background:var(--accent); }
+    .fd.l { background:var(--clay); }
+
+    .kr-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:16px; }
+    .kr-card { background:var(--white); border-radius:14px; padding:22px; box-shadow:var(--shadow); }
+    .kr-hd   { display:flex; align-items:center; gap:14px; margin-bottom:14px; }
+    .kr-av   { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,var(--g-mid),var(--accent)); display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+    .kr-nm    { font-size:17px; font-weight:900; }
+    .kr-nm-en { font-size:11px; color:var(--gray-lt); letter-spacing:.05em; }
+    .kr-tour  { font-size:11px; color:var(--gray-md); margin-top:2px; }
+    .kr-rank  { font-size:38px; font-weight:900; color:var(--g-mid); letter-spacing:-0.03em; line-height:1; }
+    .kr-rlbl  { font-size:12px; color:var(--gray-md); }
+    .kr-desc  { font-size:13px; color:var(--gray-md); line-height:1.7; margin-top:10px; }
+
+    /* ══ TAB 3: 이슈 & 경기 ══ */
+    .gs-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin-bottom:28px; }
+    .gs-card { border-radius:14px; padding:20px 18px; box-shadow:var(--shadow); position:relative; overflow:hidden; }
+    .gs-card::before { content:""; position:absolute; right:-20px; bottom:-20px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,.07); pointer-events:none; }
+    .gs-card.ao  { background:linear-gradient(135deg,#1A3A5C,#2C5278); }
+    .gs-card.rg  { background:linear-gradient(135deg,#7A3020,#A04030); }
+    .gs-card.wb  { background:linear-gradient(135deg,#1C3C1C,#2C5240); }
+    .gs-card.uso { background:linear-gradient(135deg,#1A2852,#263468); }
+    .gs-nm   { font-size:14px; font-weight:900; color:#fff; margin-bottom:2px; position:relative; }
+    .gs-loc  { font-size:10px; color:rgba(255,255,255,.65); margin-bottom:10px; letter-spacing:.06em; position:relative; }
+    .gs-date { font-size:12px; font-weight:600; color:rgba(255,255,255,.9); position:relative; }
+    .gs-surf { font-size:10px; color:rgba(255,255,255,.65); margin-top:3px; position:relative; }
+    .gs-tag  { display:inline-block; font-size:10px; font-weight:700; padding:3px 9px; border-radius:100px; margin-top:10px; position:relative; }
+    .gs-tag.upcoming { background:#fff; color:var(--clay); }
+    .gs-tag.done     { background:rgba(255,255,255,.18); color:#fff; }
+    .gs-tag.live     { background:#fff; color:var(--green); }
+
+    .news-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; margin-bottom:28px; }
+    .news-card { background:var(--white); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); border-left:3px solid var(--accent); }
+    .nc-cat   { font-size:10px; font-weight:700; color:var(--g-mid); letter-spacing:.12em; text-transform:uppercase; margin-bottom:6px; }
+    .nc-title { font-size:15px; font-weight:700; line-height:1.5; margin-bottom:8px; }
+    .nc-desc  { font-size:13px; color:var(--gray-md); line-height:1.7; }
+    .nc-date  { font-size:11px; color:var(--gray-lt); margin-top:10px; }
+    .nc-badge { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; margin-right:6px; }
+
+    .result-card { background:var(--white); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); margin-bottom:12px; }
+    .rc-hd { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+    .rc-tourn { font-size:14px; font-weight:700; }
+    .rc-date  { font-size:12px; color:var(--gray-lt); }
+    .match-row { display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--border); }
+    .m-player { flex:1; font-size:13px; display:flex; align-items:center; gap:6px; }
+    .m-player.winner { font-weight:700; }
+    .m-score  { font-size:12px; font-weight:600; color:var(--gray-md); min-width:130px; text-align:right; font-family:monospace; letter-spacing:.05em; }
+
+    /* ══ TAB 4: 장비 ══ */
+    .equip-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .equip-card { background:var(--white); border-radius:14px; padding:20px; box-shadow:var(--shadow); transition:transform .15s,box-shadow .2s; }
+    .equip-card:hover { transform:translateY(-2px); box-shadow:0 6px 22px rgba(0,0,0,.12); }
+    .eq-brand { font-size:10px; font-weight:700; color:var(--g-mid); letter-spacing:.14em; text-transform:uppercase; margin-bottom:3px; }
+    .eq-nm    { font-size:15px; font-weight:700; margin-bottom:4px; }
+    .eq-for   { font-size:12px; color:var(--gray-md); margin-bottom:12px; }
+    .eq-specs { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:12px; }
+    .sp       { font-size:11px; font-weight:500; padding:3px 8px; border-radius:4px; background:var(--g-lt); color:var(--g-mid); }
+    .sp.blue  { background:var(--hard-lt); color:var(--hard); }
+    .sp.red   { background:var(--clay-lt); color:var(--clay); }
+    .eq-stars { color:var(--gold); font-size:13px; letter-spacing:1px; }
+    .eq-price  { font-size:13px; font-weight:600; color:var(--gray-md); margin-top:8px; }
+    .eq-player { font-size:11px; color:var(--gray-lt); margin-top:3px; }
+
+    .str-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:14px; }
+    .str-card { background:var(--white); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); display:flex; gap:14px; }
+    .str-color{ width:6px; align-self:stretch; border-radius:3px; flex-shrink:0; }
+    .str-nm   { font-size:14px; font-weight:700; margin-bottom:1px; }
+    .str-brand{ font-size:11px; color:var(--gray-lt); margin-bottom:12px; }
+    .str-br   { display:flex; align-items:center; gap:8px; margin-bottom:5px; font-size:12px; color:var(--gray-md); }
+    .str-bl   { width:48px; }
+    .str-bw   { flex:1; height:5px; background:var(--border); border-radius:4px; overflow:hidden; }
+    .str-bf   { height:100%; border-radius:4px; background:var(--accent); }
+    .str-type { display:inline-block; font-size:10px; font-weight:700; padding:2px 8px; border-radius:4px; background:var(--g-lt); color:var(--g-mid); margin-top:8px; }
+
+    /* ══ TAB 5: 자유게시판 ══ */
+    .board-layout { display:grid; grid-template-columns:1fr 268px; gap:22px; align-items:start; }
+    .write-btn { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; background:linear-gradient(135deg,var(--green) 0%,var(--g-mid) 100%); color:#fff; border:none; cursor:pointer; padding:14px; border-radius:12px; font-size:14px; font-weight:700; font-family:inherit; margin-bottom:18px; box-shadow:0 4px 16px rgba(28,52,36,.24); transition:opacity .2s; }
+    .write-btn:hover { opacity:.9; }
+    .post-card { background:var(--white); border-radius:14px; padding:20px 22px; box-shadow:var(--shadow); margin-bottom:14px; }
+    .post-hd   { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
+    .post-av   { width:36px; height:36px; border-radius:50%; background:var(--g-mid); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:700; color:#fff; flex-shrink:0; }
+    .post-author { font-size:14px; font-weight:700; }
+    .post-time   { font-size:11px; color:var(--gray-lt); }
+    .post-badge  { margin-left:auto; font-size:10px; font-weight:700; padding:3px 9px; border-radius:4px; }
+    .post-body   { font-size:14px; line-height:1.8; color:var(--gray-dk); margin-bottom:12px; }
+    .post-tags   { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px; }
+    .post-tag    { font-size:11px; font-weight:600; padding:3px 10px; border-radius:100px; background:var(--g-lt); color:var(--g-mid); }
+    .post-ft     { display:flex; align-items:center; gap:10px; }
+    .like-btn, .reply-btn { display:flex; align-items:center; gap:5px; border:1px solid var(--border); background:none; cursor:pointer; padding:6px 14px; border-radius:100px; font-size:12px; font-weight:600; color:var(--gray-md); font-family:inherit; transition:all .2s; }
+    .like-btn:hover, .like-btn.liked { border-color:var(--clay); color:var(--clay); background:var(--clay-lt); }
+    .reply-btn:hover { border-color:var(--g-mid); color:var(--g-mid); }
+    .replies-sec { margin-top:14px; padding-top:14px; border-top:1px solid var(--border); }
+    .reply-item  { display:flex; gap:10px; padding:10px; background:var(--bg); border-radius:8px; margin-bottom:6px; }
+    .reply-av    { width:28px; height:28px; border-radius:50%; background:var(--accent); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:700; color:#fff; flex-shrink:0; }
+    .reply-author{ font-size:12px; font-weight:700; }
+    .reply-txt   { font-size:13px; line-height:1.6; margin-top:2px; }
+    .reply-time  { font-size:10px; color:var(--gray-lt); margin-top:2px; }
+    .reply-inp-row { display:flex; gap:8px; margin-top:10px; }
+    .reply-inp { flex:1; border:1px solid var(--border); border-radius:8px; padding:8px 12px; font-size:13px; font-family:inherit; outline:none; }
+    .reply-inp:focus { border-color:var(--g-mid); }
+    .reply-sub { background:var(--g-mid); color:#fff; border:none; cursor:pointer; padding:8px 14px; border-radius:8px; font-size:12px; font-weight:700; font-family:inherit; }
+    .sb-card { background:var(--white); border-radius:14px; padding:18px; box-shadow:var(--shadow); margin-bottom:14px; }
+    .sb-title { font-size:13px; font-weight:700; margin-bottom:13px; }
+    .filter-btns { display:flex; flex-wrap:wrap; gap:6px; }
+    .filter-btn { border:1px solid var(--border); background:none; cursor:pointer; padding:5px 12px; border-radius:100px; font-size:12px; font-weight:500; color:var(--gray-md); font-family:inherit; transition:all .2s; }
+    .filter-btn:hover, .filter-btn.active { background:var(--g-mid); color:#fff; border-color:var(--g-mid); }
+    .pop-item { display:flex; align-items:center; gap:10px; font-size:13px; padding:4px 0; }
+    .pop-rank { font-size:12px; font-weight:700; color:var(--gray-lt); width:18px; }
+    .pop-rank.top { color:var(--clay); }
+    .pop-nm  { font-weight:600; flex:1; }
+    .pop-cnt { font-size:11px; color:var(--gray-lt); }
+    .type-free   { background:var(--g-lt);   color:var(--g-mid); }
+    .type-qna    { background:var(--hard-lt); color:var(--hard); }
+    .type-match  { background:#F2E8DC; color:#8A4520; }
+    .type-lesson { background:#ECE6F0; color:#5C3A72; }
+    .type-gear   { background:var(--clay-lt); color:var(--clay); }
+    .type-club   { background:#D8EBE6; color:#2A5248; }
+
+    /* ══ TAB 4: 실력별 추천 조합 ══ */
+    .combo-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:20px; }
+    .combo-card { background:var(--white); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; }
+    .combo-hd   { padding:20px 22px 16px; border-bottom:1px solid var(--border); }
+    .combo-badge { display:inline-block; font-size:11px; font-weight:700; padding:4px 13px; border-radius:100px; letter-spacing:.06em; margin-bottom:10px; }
+    .combo-badge.begin  { background:#DDE6F0; color:var(--hard); }
+    .combo-badge.novice { background:var(--g-lt); color:var(--g-mid); }
+    .combo-badge.inter  { background:var(--clay-lt); color:var(--clay); }
+    .combo-badge.adv    { background:#EDE6F0; color:#5C3A72; }
+    .combo-title { font-size:17px; font-weight:900; margin-bottom:4px; }
+    .combo-period { font-size:11px; color:var(--gray-lt); letter-spacing:.03em; margin-bottom:8px; }
+    .combo-desc  { font-size:13px; color:var(--gray-md); line-height:1.6; }
+    .combo-body  { padding:16px 22px 20px; }
+    .combo-item  { display:flex; gap:12px; padding:11px 0; border-bottom:1px solid var(--border); }
+    .combo-item:last-child { border-bottom:none; }
+    .combo-icon  { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; background:var(--g-lt); }
+    .combo-item-cat { font-size:10px; font-weight:700; color:var(--g-mid); letter-spacing:.1em; text-transform:uppercase; margin-bottom:2px; }
+    .combo-item-nm  { font-size:14px; font-weight:700; margin-bottom:3px; }
+    .combo-item-why { font-size:12px; color:var(--gray-md); line-height:1.55; }
+    .combo-tips { margin-top:14px; padding:12px 14px; background:var(--g-lt); border-radius:10px; }
+    .combo-tips-title { font-size:11px; font-weight:700; color:var(--g-mid); letter-spacing:.06em; margin-bottom:7px; }
+    .combo-tips li { font-size:12px; color:var(--gray-md); line-height:1.75; padding-left:16px; position:relative; list-style:none; }
+    .combo-tips li::before { content:"→"; position:absolute; left:0; color:var(--accent); font-size:10px; top:2px; }
+    @media (max-width:960px) { .combo-grid { grid-template-columns:1fr; } }
+
+    /* ─ MODALS ─ */
+    .modal-ov { display:none; position:fixed; inset:0; background:rgba(0,0,0,.48); z-index:999; align-items:center; justify-content:center; }
+    .modal-ov.open { display:flex; }
+    .modal-box { background:var(--white); border-radius:18px; width:100%; max-width:480px; padding:32px 32px 28px; position:relative; box-shadow:0 20px 60px rgba(0,0,0,.28); max-height:92vh; overflow-y:auto; }
+    .modal-title { font-size:18px; font-weight:900; margin-bottom:22px; }
+    .modal-close { position:absolute; top:18px; right:18px; background:none; border:none; font-size:18px; cursor:pointer; color:var(--gray-md); }
+    .form-g  { margin-bottom:15px; }
+    .form-lb { display:block; font-size:11px; font-weight:700; letter-spacing:.06em; color:var(--gray-md); margin-bottom:7px; }
+    .form-in, .form-sel, .form-ta { width:100%; border:1.5px solid var(--border); border-radius:10px; padding:11px 14px; font-size:14px; font-family:inherit; color:var(--gray-dk); outline:none; transition:border-color .2s; }
+    .form-in:focus,.form-sel:focus,.form-ta:focus { border-color:var(--g-mid); }
+    .form-ta { resize:vertical; min-height:100px; }
+    .form-row2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .modal-sub { width:100%; padding:13px; background:var(--g-mid); color:#fff; border:none; border-radius:10px; cursor:pointer; font-size:15px; font-weight:700; font-family:inherit; margin-top:8px; transition:background .2s; }
+    .modal-sub:hover { background:var(--green); }
+
+    .toast { position:fixed; bottom:28px; left:50%; transform:translateX(-50%); background:var(--gray-dk); color:#fff; padding:11px 24px; border-radius:100px; font-size:13px; font-weight:500; z-index:9999; display:none; box-shadow:0 4px 20px rgba(0,0,0,.3); white-space:nowrap; }
+    .site-footer { background:var(--green); text-align:center; padding:20px; font-size:11px; font-weight:300; color:rgba(255,255,255,.38); letter-spacing:.04em; }
+
+    @media (max-width:960px) {
+      .court-row,.kr-grid { grid-template-columns:1fr; }
+      .grip-grid { grid-template-columns:repeat(2,1fr); }
+      .stroke-grid,.equip-grid,.equip-shoe-grid { grid-template-columns:repeat(2,1fr); }
+      .stance-grid { grid-template-columns:1fr; }
+      .gs-grid,.news-grid { grid-template-columns:repeat(2,1fr); }
+      .board-layout { grid-template-columns:1fr; }
+      .board-sidebar { display:none; }
+    }
+    @media (max-width:600px) {
+      .site-header { padding:0 16px; } .h-badge { display:none; }
+      .tab-nav { padding:0 8px; } .cont { padding:18px 14px 56px; }
+      .stroke-grid,.equip-grid,.equip-shoe-grid,.str-grid { grid-template-columns:1fr; }
+      .gs-grid { grid-template-columns:1fr; }
+      .score-steps { grid-template-columns:repeat(3,1fr); }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ─ HEADER ─ -->
+<header class="site-header">
+  <div class="h-logo">
+    <div class="h-logo-icon">🎾</div>
+    <div>
+      <div class="h-logo-nm">테니스 취미 노트</div>
+      <div class="h-logo-sub">Tennis Hobby Journal</div>
+    </div>
+  </div>
+  <div class="h-right">
+    <span class="h-badge">🏆 2026 시즌</span>
+    <div class="h-date" id="hDate"></div>
+  </div>
+</header>
+
+<!-- ─ TAB NAV ─ -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="switchTab('basics')"    id="tn-basics">   <span>📖</span> 기초 &amp; 스킬</button>
+  <button class="tab-btn"        onclick="switchTab('ranking')"   id="tn-ranking">  <span>🏆</span> 세계 랭킹</button>
+  <button class="tab-btn"        onclick="switchTab('issues')"    id="tn-issues">   <span>📰</span> 이슈 &amp; 경기</button>
+  <button class="tab-btn"        onclick="switchTab('equipment')" id="tn-equipment"><span>🎒</span> 장비 가이드</button>
+  <button class="tab-btn"        onclick="switchTab('board')"     id="tn-board">    <span>💬</span> 자유게시판</button>
+</nav>
+
+<!-- ══════════════════════════════════════
+     TAB 1 — 기초 & 스킬
+     ══════════════════════════════════════ -->
+<div class="tab-panel active" id="tab-basics">
+  <div class="cont">
+    <div class="sub-nav" id="sn-basics">
+      <button class="sub-btn active" onclick="switchSub('basics','theory',this)">🎾 기초 이론</button>
+      <button class="sub-btn"        onclick="switchSub('basics','stance',this)">🧍 자세 &amp; 그립</button>
+      <button class="sub-btn"        onclick="switchSub('basics','stroke',this)">🏓 기본 스트로크</button>
+      <button class="sub-btn"        onclick="switchSub('basics','adv',this)">⚡ 심화 기술</button>
+    </div>
+
+    <!-- 기초 이론 -->
+    <div class="sub-panel active" data-g="basics" id="sp-basics-theory">
+      <div class="sec-label">코트 종류</div>
+      <div class="court-row">
+        <div class="court-card hard">
+          <div class="cc-icon">🔵</div>
+          <div class="cc-title">하드코트 (Hard Court)</div>
+          <div class="cc-desc">콘크리트·아스팔트 위에 아크릴 코팅. 가장 보편적인 코트로 바운드가 빠르고 일정합니다. 관리가 쉬워 전 세계 대부분의 코트가 하드입니다.</div>
+          <div class="cc-gs">
+            <span class="gs-pill">호주오픈</span>
+            <span class="gs-pill">US오픈</span>
+            <span class="gs-pill">ATP Finals</span>
+          </div>
+        </div>
+        <div class="court-card clay">
+          <div class="cc-icon">🟠</div>
+          <div class="cc-title">클레이코트 (Clay Court)</div>
+          <div class="cc-desc">붉은 벽돌 가루나 모래로 만든 코트. 바운드가 느리고 높아 랠리가 길어집니다. 체력과 탑스핀 능력이 특히 중요합니다.</div>
+          <div class="cc-gs">
+            <span class="gs-pill">롤랑가로스</span>
+            <span class="gs-pill">마드리드오픈</span>
+            <span class="gs-pill">로마마스터즈</span>
+          </div>
+        </div>
+        <div class="court-card grass">
+          <div class="cc-icon">🟢</div>
+          <div class="cc-title">잔디코트 (Grass Court)</div>
+          <div class="cc-desc">천연 잔디 위의 코트. 바운드가 낮고 빠르며 미끄럽습니다. 서브&발리 플레이가 강점을 발휘합니다. 여름 한 시즌에만 사용합니다.</div>
+          <div class="cc-gs">
+            <span class="gs-pill">윔블던</span>
+            <span class="gs-pill">퀸즈클럽</span>
+            <span class="gs-pill">할레오픈</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-label">점수 체계</div>
+      <div class="score-card">
+        <div style="font-size:14px;font-weight:600;margin-bottom:6px;">포인트 → 게임 → 세트 → 매치</div>
+        <div style="font-size:13px;color:var(--gray-md);margin-bottom:14px;">테니스의 점수는 포인트를 쌓아 게임을 이기고, 게임을 쌓아 세트를, 세트를 쌓아 매치를 승리합니다.</div>
+        <div class="score-steps">
+          <div class="score-step"><div class="score-num">0</div><div class="score-lbl">러브(Love)</div></div>
+          <div class="score-step"><div class="score-num">15</div><div class="score-lbl">피프틴</div></div>
+          <div class="score-step"><div class="score-num">30</div><div class="score-lbl">서티</div></div>
+          <div class="score-step"><div class="score-num">40</div><div class="score-lbl">포티</div></div>
+          <div class="score-step" style="background:#CCDDD2;"><div class="score-num" style="color:var(--green);">🏆</div><div class="score-lbl">게임!</div></div>
+        </div>
+        <div class="score-info">
+          <div class="score-info-item">
+            <div class="sci-title">듀스 (Deuce)</div>
+            <div class="sci-desc">40:40 동점 상태. 이후 2포인트를 연속으로 이긴 선수가 게임을 가져갑니다. (어드밴티지 → 게임)</div>
+          </div>
+          <div class="score-info-item">
+            <div class="sci-title">세트 (Set)</div>
+            <div class="sci-desc">6게임을 먼저 이기면 세트 승리. 6:6이 되면 타이브레이크(7포인트 선취). 매치는 보통 3세트 2선취제.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 자세 & 그립 -->
+    <div class="sub-panel" data-g="basics" id="sp-basics-stance">
+      <div class="sec-label">기본 자세</div>
+      <div class="stance-grid">
+        <div class="stance-card">
+          <div class="sc-icon">🧍</div>
+          <div>
+            <div class="sc-nm">준비 자세</div>
+            <div class="sc-en">Ready Position</div>
+            <ul class="sc-pts">
+              <li>발은 어깨너비로 벌리고 무릎을 약간 굽힌다</li>
+              <li>체중은 발바닥 앞쪽(볼 오브 풋)에 싣는다</li>
+              <li>라켓은 몸 앞 중앙에서 양손으로 가볍게 잡는다</li>
+              <li>어깨를 이완하고 시선은 상대 선수에 집중한다</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stance-card">
+          <div class="sc-icon">↔️</div>
+          <div>
+            <div class="sc-nm">오픈 스탠스</div>
+            <div class="sc-en">Open Stance</div>
+            <ul class="sc-pts">
+              <li>발이 네트와 평행하게 열려 있는 자세</li>
+              <li>회전을 최대한 활용해 파워를 생성</li>
+              <li>현대 포핸드에서 가장 많이 사용</li>
+              <li>빠른 회복이 가능해 연속 공격에 유리</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stance-card">
+          <div class="sc-icon">↗️</div>
+          <div>
+            <div class="sc-nm">클로즈드 스탠스</div>
+            <div class="sc-en">Closed Stance</div>
+            <ul class="sc-pts">
+              <li>앞발(비우세 발)이 네트 쪽을 향하는 자세</li>
+              <li>무게중심 이동으로 안정적인 파워 생성</li>
+              <li>백핸드나 어프로치샷에 자주 사용</li>
+              <li>코트를 따라 이동하기 좋은 자세</li>
+            </ul>
+          </div>
+        </div>
+        <div class="stance-card">
+          <div class="sc-icon">⬆️</div>
+          <div>
+            <div class="sc-nm">서브 자세</div>
+            <div class="sc-en">Serve Stance</div>
+            <ul class="sc-pts">
+              <li>플랫폼 스탠스: 두 발을 고정하고 서브</li>
+              <li>핀포인트 스탠스: 뒷발을 앞발에 모아 서브</li>
+              <li>어깨는 네트와 45° 각도로 위치</li>
+              <li>토스의 일관성이 서브 성공의 핵심</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-label">그립 종류</div>
+      <div class="grip-grid">
+        <div class="grip-card">
+          <div class="gc-icon">✋</div>
+          <div class="gc-nm">이스턴 그립</div>
+          <div class="gc-en">Eastern Grip</div>
+          <div class="gc-desc">손바닥이 라켓 측면을 감싸는 가장 기본적인 그립. 컨트롤이 좋고 다양한 스핀을 구사할 수 있어 초보자에게 권장.</div>
+        </div>
+        <div class="grip-card">
+          <div class="gc-icon">🤚</div>
+          <div class="gc-nm">세미웨스턴</div>
+          <div class="gc-en">Semi-Western</div>
+          <div class="gc-desc">현재 프로 선수들이 가장 많이 사용하는 그립. 탑스핀 생성에 유리하며 파워와 컨트롤의 균형이 좋음.</div>
+        </div>
+        <div class="grip-card">
+          <div class="gc-icon">👊</div>
+          <div class="gc-nm">웨스턴 그립</div>
+          <div class="gc-en">Western Grip</div>
+          <div class="gc-desc">라켓 면을 거의 땅 쪽으로 향하게 잡는 그립. 강한 탑스핀 생성에 최적화. 낮은 볼 처리가 어렵고 슬라이스 변환이 불편함.</div>
+        </div>
+        <div class="grip-card">
+          <div class="gc-icon">🤜</div>
+          <div class="gc-nm">컨티넨탈</div>
+          <div class="gc-en">Continental</div>
+          <div class="gc-desc">서브, 발리, 스매시, 슬라이스에 주로 사용. 손도끼처럼 라켓을 잡는 방식. 전천후 그립으로 네트 플레이에 필수.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 기본 스트로크 -->
+    <div class="sub-panel" data-g="basics" id="sp-basics-stroke">
+      <div class="stroke-grid">
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">🏓</div><span class="diff d-begin">입문</span></div>
+          <div class="sk-nm">포핸드</div><div class="sk-en">Forehand</div>
+          <ul class="sk-pts">
+            <li>우세 손 방향의 공을 치는 기본 스트로크</li>
+            <li>어깨 회전과 체중 이동으로 파워 생성</li>
+            <li>팔로우스루는 반대쪽 어깨까지 충분히</li>
+            <li>라켓 헤드 속도가 파워를 결정</li>
+          </ul>
+          <div class="sk-tip">준비 자세에서 어깨를 충분히 돌려 테이크백을 만들어야 강한 포핸드가 나옵니다.</div>
+        </div>
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">🔄</div><span class="diff d-begin">입문</span></div>
+          <div class="sk-nm">백핸드</div><div class="sk-en">Backhand</div>
+          <ul class="sk-pts">
+            <li>비우세 손 방향의 공을 치는 스트로크</li>
+            <li>두손 백핸드: 더 안정적, 파워 있음 (추천)</li>
+            <li>한손 백핸드: 리치가 길고 슬라이스 활용 용이</li>
+            <li>두손 백핸드에서 비우세손이 주도적 역할</li>
+          </ul>
+          <div class="sk-tip">두 손 백핸드는 비우세 손(왼손잡이는 오른손)으로 라켓을 끌어당기는 느낌으로 치세요.</div>
+        </div>
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">🚀</div><span class="diff d-mid">초급</span></div>
+          <div class="sk-nm">서브</div><div class="sk-en">Serve</div>
+          <ul class="sk-pts">
+            <li>플랫: 빠른 직구형, 1st 서브에 주로 활용</li>
+            <li>킥(탑스핀): 높이 바운드, 안정적인 2nd 서브</li>
+            <li>슬라이스: 옆으로 휘는 서브, 코너 공략</li>
+            <li>토스 위치가 서브 종류를 결정</li>
+          </ul>
+          <div class="sk-tip">토스를 항상 같은 높이와 위치에 올리는 연습을 반복하세요. 일관된 토스가 서브의 90%입니다.</div>
+        </div>
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">⚡</div><span class="diff d-mid">초급</span></div>
+          <div class="sk-nm">발리</div><div class="sk-en">Volley</div>
+          <ul class="sk-pts">
+            <li>네트 앞에서 바운드 전에 치는 샷</li>
+            <li>백스윙은 최소화하고 펀치 동작으로</li>
+            <li>컨티넨탈 그립 필수</li>
+            <li>무릎을 굽혀 낮은 볼도 눈높이에서 처리</li>
+          </ul>
+          <div class="sk-tip">발리는 스윙하지 않습니다. 라켓 면을 고정하고 앞으로 밀어주는 느낌으로 치세요.</div>
+        </div>
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">💥</div><span class="diff d-mid">초급</span></div>
+          <div class="sk-nm">스매시</div><div class="sk-en">Overhead Smash</div>
+          <ul class="sk-pts">
+            <li>머리 위로 온 높은 공을 강타하는 샷</li>
+            <li>서브 동작과 매우 유사한 메커니즘</li>
+            <li>발을 빠르게 이동해 공 바로 아래 위치</li>
+            <li>눈으로 공을 끝까지 추적하는 것이 핵심</li>
+          </ul>
+          <div class="sk-tip">로브가 왔을 때 뒤로 이동하며 옆으로 서는 자세를 만드는 것이 먼저입니다.</div>
+        </div>
+        <div class="stroke-card">
+          <div class="sk-top"><div class="sk-icon">🌀</div><span class="diff d-mid">초급</span></div>
+          <div class="sk-nm">슬라이스</div><div class="sk-en">Slice</div>
+          <ul class="sk-pts">
+            <li>라켓 면을 열어 아래로 슬라이딩하는 샷</li>
+            <li>낮고 빠른 바운드로 상대 리듬 파괴</li>
+            <li>컨티넨탈 그립으로 치는 것이 기본</li>
+            <li>팔로우스루를 길게 유지해야 컨트롤 향상</li>
+          </ul>
+          <div class="sk-tip">슬라이스는 '깎는다'기보다 '아래쪽으로 통과시킨다'는 느낌으로 치면 더 효과적입니다.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 심화 기술 -->
+    <div class="sub-panel" data-g="basics" id="sp-basics-adv">
+      <div class="stroke-grid">
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">🌀</div><span class="diff d-adv">중급</span></div>
+          <div class="sk-nm">탑스핀</div><div class="sk-en">Topspin</div>
+          <ul class="sk-pts">
+            <li>라켓을 아래에서 위로 브러싱하여 앞회전 생성</li>
+            <li>높이 튀어 상대 베이스라인 깊숙이 떨어짐</li>
+            <li>안정적으로 네트를 넘길 수 있는 마진 증가</li>
+            <li>세미웨스턴·웨스턴 그립에서 더 쉽게 생성</li>
+          </ul>
+          <div class="sk-tip">라켓 헤드를 공 아래에서 시작해 빠르게 위로 쓸어 올리는 연습을 반복하세요.</div>
+        </div>
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">🪶</div><span class="diff d-adv">중급</span></div>
+          <div class="sk-nm">드롭샷</div><div class="sk-en">Drop Shot</div>
+          <ul class="sk-pts">
+            <li>네트 바로 너머에 살짝 떨어뜨리는 터치샷</li>
+            <li>백스핀을 걸어 바운드 후 멈추게 함</li>
+            <li>상대를 앞으로 끌어내 코트를 열어냄</li>
+            <li>상대가 뒤에 있을 때 기습적으로 사용</li>
+          </ul>
+          <div class="sk-tip">드롭샷은 타이밍이 생명입니다. 마치 강타를 칠 것처럼 준비 동작을 속이세요.</div>
+        </div>
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">🎈</div><span class="diff d-adv">중급</span></div>
+          <div class="sk-nm">로브</div><div class="sk-en">Lob</div>
+          <ul class="sk-pts">
+            <li>상대 머리 위로 높이 올리는 수비·공격 샷</li>
+            <li>수비 로브: 높게 올려 시간 벌기</li>
+            <li>공격 로브: 탑스핀으로 빠르게 내리꽂음</li>
+            <li>네트로 전진한 상대를 공략할 때 효과적</li>
+          </ul>
+          <div class="sk-tip">공격 로브는 상대의 스매시 각도를 미리 계산해서 코너로 보내면 리턴하기 매우 어렵습니다.</div>
+        </div>
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">🏃</div><span class="diff d-adv">중급</span></div>
+          <div class="sk-nm">어프로치샷</div><div class="sk-en">Approach Shot</div>
+          <ul class="sk-pts">
+            <li>네트 쪽으로 전진하면서 치는 이동 샷</li>
+            <li>짧은 볼을 처리하면서 네트로 따라 들어감</li>
+            <li>상대 코너로 깊게 보내 답신 각도를 좁힘</li>
+            <li>발리로 마무리하기 위한 포지션 이동 역할</li>
+          </ul>
+          <div class="sk-tip">어프로치샷 후 네트 중앙 T존으로 이동해 T포지션을 잡으세요.</div>
+        </div>
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">⚡</div><span class="diff d-adv">중급</span></div>
+          <div class="sk-nm">패싱샷</div><div class="sk-en">Passing Shot</div>
+          <ul class="sk-pts">
+            <li>네트로 전진한 상대 옆을 지나치는 강타</li>
+            <li>다운더라인(DL): 네트 옆을 따라 직선으로</li>
+            <li>크로스코트: 대각선으로 넓게 공략</li>
+            <li>낮고 빠른 탑스핀 샷이 가장 효과적</li>
+          </ul>
+          <div class="sk-tip">패싱샷은 임팩트 후 공이 낮게 날아가야 합니다. 네트 위 30cm 이내를 노리세요.</div>
+        </div>
+        <div class="stroke-card" style="border-top-color:var(--clay);">
+          <div class="sk-top"><div class="sk-icon">📐</div><span class="diff d-adv">고급</span></div>
+          <div class="sk-nm">앵글샷</div><div class="sk-en">Angle Shot</div>
+          <ul class="sk-pts">
+            <li>코트 모서리를 공략하는 예각의 샷</li>
+            <li>상대를 코트 밖으로 끌어내는 전술적 샷</li>
+            <li>탑스핀과 결합하면 더욱 예각 가능</li>
+            <li>단식보다 복식에서 더욱 강력한 효과</li>
+          </ul>
+          <div class="sk-tip">앵글샷은 가능한 한 네트 가까이서 치고, 오픈 스탠스로 회전력을 극대화하세요.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 2 — 세계 랭킹
+     ══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-ranking">
+  <div class="cont">
+    <div class="sub-nav" id="sn-ranking">
+      <button class="sub-btn active" onclick="switchSub('ranking','atp',this)">👨 ATP 랭킹</button>
+      <button class="sub-btn"        onclick="switchSub('ranking','wta',this)">👩 WTA 랭킹</button>
+      <button class="sub-btn"        onclick="switchSub('ranking','kr',this)">🇰🇷 한국 선수</button>
+    </div>
+
+    <!-- ATP -->
+    <div class="sub-panel active" data-g="ranking" id="sp-ranking-atp">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="sec-label" style="flex:1;margin-bottom:0;">ATP 세계 랭킹 TOP 15</div>
+        <span style="font-size:11px;color:var(--gray-lt);margin-left:16px;">※ 2026년 5월 기준 참고용 데이터</span>
+      </div>
+      <div class="rank-wrap">
+        <table class="rtbl">
+          <thead><tr>
+            <th style="width:60px;">순위</th><th>선수</th><th>국적</th>
+            <th class="r">포인트</th><th>최근 5경기</th>
+          </tr></thead>
+          <tbody id="atpBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- WTA -->
+    <div class="sub-panel" data-g="ranking" id="sp-ranking-wta">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;">
+        <div class="sec-label" style="flex:1;margin-bottom:0;">WTA 세계 랭킹 TOP 15</div>
+        <span style="font-size:11px;color:var(--gray-lt);margin-left:16px;">※ 2026년 5월 기준 참고용 데이터</span>
+      </div>
+      <div class="rank-wrap">
+        <table class="rtbl">
+          <thead><tr>
+            <th style="width:60px;">순위</th><th>선수</th><th>국적</th>
+            <th class="r">포인트</th><th>최근 5경기</th>
+          </tr></thead>
+          <tbody id="wtaBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 한국 선수 -->
+    <div class="sub-panel" data-g="ranking" id="sp-ranking-kr">
+      <div class="sec-label">한국 선수 현황</div>
+      <div class="kr-grid" id="krGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 3 — 이슈 & 경기
+     ══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-issues">
+  <div class="cont">
+    <div class="sec-label">2026 그랜드슬램 일정</div>
+    <div class="gs-grid">
+      <div class="gs-card ao">
+        <div class="gs-nm">Australian Open</div>
+        <div class="gs-loc">🇦🇺 멜버른 · 로드 레이버 아레나</div>
+        <div class="gs-date">2026. 01. 12 – 01. 25</div>
+        <div class="gs-surf">하드코트 (DecoTurf)</div>
+        <span class="gs-tag done">✅ 종료</span>
+      </div>
+      <div class="gs-card rg">
+        <div class="gs-nm">Roland Garros</div>
+        <div class="gs-loc">🇫🇷 파리 · 스타드 롤랑가로스</div>
+        <div class="gs-date">2026. 05. 25 – 06. 08</div>
+        <div class="gs-surf">클레이코트 (레드 클레이)</div>
+        <span class="gs-tag upcoming">⏰ D-13 임박</span>
+      </div>
+      <div class="gs-card wb">
+        <div class="gs-nm">Wimbledon</div>
+        <div class="gs-loc">🇬🇧 런던 · 올잉글랜드클럽</div>
+        <div class="gs-date">2026. 06. 29 – 07. 12</div>
+        <div class="gs-surf">잔디코트 (천연 잔디)</div>
+        <span class="gs-tag done">예정</span>
+      </div>
+      <div class="gs-card uso">
+        <div class="gs-nm">US Open</div>
+        <div class="gs-loc">🇺🇸 뉴욕 · USTA 빌리 진 킹 센터</div>
+        <div class="gs-date">2026. 08. 24 – 09. 06</div>
+        <div class="gs-surf">하드코트 (DecoTurf)</div>
+        <span class="gs-tag done">예정</span>
+      </div>
+    </div>
+
+    <div class="sec-label">최신 테니스 뉴스</div>
+    <div class="news-grid">
+      <div class="news-card">
+        <div class="nc-cat">대회 소식</div>
+        <div class="nc-title">알카라스, 마드리드 오픈 남자단식 2연속 우승</div>
+        <div class="nc-desc">카를로스 알카라스가 마드리드 마스터즈 결승에서 야닉 시너를 3세트 접전 끝에 꺾고 2연속 우승을 달성했다. 클레이 시즌 본격화를 앞두고 롤랑가로스 최강 우승 후보로 부상했다.</div>
+        <div class="nc-date">2026. 05. 09</div>
+      </div>
+      <div class="news-card" style="border-left-color:var(--clay);">
+        <div class="nc-cat">선수 소식</div>
+        <div class="nc-title">조코비치, 롤랑가로스 앞두고 무릎 부상 회복 선언</div>
+        <div class="nc-desc">노바크 조코비치가 자신의 SNS를 통해 무릎 수술 후 완전 회복을 선언하며 롤랑가로스 출전을 공식 확인했다. 올 시즌 메이저 타이틀 도전에 나선다.</div>
+        <div class="nc-date">2026. 05. 07</div>
+      </div>
+      <div class="news-card" style="border-left-color:var(--hard);">
+        <div class="nc-cat">WTA 소식</div>
+        <div class="nc-title">사발렌카, WTA 로마 마스터즈 우승으로 클레이 기세 유지</div>
+        <div class="nc-desc">아리나 사발렌카가 로마 인터내셔널 결승에서 이가 스비아테크를 꺾고 우승했다. 스비아테크의 클레이 절대 강자 지위에 균열이 생기며 롤랑가로스 전망이 안갯속으로.</div>
+        <div class="nc-date">2026. 05. 05</div>
+      </div>
+      <div class="news-card" style="border-left-color:var(--grass);">
+        <div class="nc-cat">🇰🇷 한국 소식</div>
+        <div class="nc-title">권순우, 제네바 오픈 16강 진출로 클레이 시즌 청신호</div>
+        <div class="nc-desc">권순우가 ATP 250 제네바 오픈에서 세계 랭킹 45위 선수를 꺾고 16강에 진출했다. 롤랑가로스 본선 진출에 청신호가 켜졌다는 평가가 나온다.</div>
+        <div class="nc-date">2026. 05. 11</div>
+      </div>
+      <div class="news-card">
+        <div class="nc-cat">장비 소식</div>
+        <div class="nc-title">윌슨, 프레스티지 신제품 라인 발표 — 2026 하반기 출시</div>
+        <div class="nc-desc">윌슨이 프로스태프 신라인업과 함께 그래핀 5세대 기술을 적용한 블레이드 V10 시리즈를 공개했다. 기존 대비 진동 감소 28%, 스위트스폿 확대 15%를 달성했다고 밝혔다.</div>
+        <div class="nc-date">2026. 05. 03</div>
+      </div>
+      <div class="news-card" style="border-left-color:var(--clay);">
+        <div class="nc-cat">선수 소식</div>
+        <div class="nc-title">정친원, 여자 단식 세계 5위 유지 — 아시아 테니스 위상 높여</div>
+        <div class="nc-desc">중국의 정친원이 2026년 5월 WTA 랭킹 5위를 유지하며 아시아권 여자 테니스 선수 중 최고 순위를 기록했다. 롤랑가로스에서 첫 그랜드슬램 우승을 노린다.</div>
+        <div class="nc-date">2026. 05. 01</div>
+      </div>
+    </div>
+
+    <div class="sec-label">최근 주요 경기 결과</div>
+    <div class="result-card">
+      <div class="rc-hd">
+        <div><div class="rc-tourn">🏆 마드리드 오픈 2026 (ATP 1000)</div><div style="display:flex;gap:6px;margin-top:4px;"><span class="ct-clay">클레이</span></div></div>
+        <div class="rc-date">2026. 05. 09</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player winner">🇪🇸 카를로스 알카라스 <span style="font-size:11px;background:#CCDDD2;color:var(--g-mid);padding:1px 6px;border-radius:3px;">우승</span></div>
+        <div class="m-score">7-6(4) 4-6 6-3</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player">🇮🇹 야닉 시너</div>
+        <div class="m-score"></div>
+      </div>
+    </div>
+    <div class="result-card">
+      <div class="rc-hd">
+        <div><div class="rc-tourn">🏆 로마 인터내셔널 2026 — WTA 1000</div><div style="display:flex;gap:6px;margin-top:4px;"><span class="ct-clay">클레이</span></div></div>
+        <div class="rc-date">2026. 05. 05</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player winner">🇧🇾 아리나 사발렌카 <span style="font-size:11px;background:#CCDDD2;color:var(--g-mid);padding:1px 6px;border-radius:3px;">우승</span></div>
+        <div class="m-score">6-3 3-6 7-5</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player">🇵🇱 이가 스비아테크</div>
+        <div class="m-score"></div>
+      </div>
+    </div>
+    <div class="result-card">
+      <div class="rc-hd">
+        <div><div class="rc-tourn">🏆 호주 오픈 2026 (남자단식 결승)</div><div style="display:flex;gap:6px;margin-top:4px;"><span class="ct-hard">하드</span></div></div>
+        <div class="rc-date">2026. 01. 25</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player winner">🇮🇹 야닉 시너 <span style="font-size:11px;background:#CCDDD2;color:var(--g-mid);padding:1px 6px;border-radius:3px;">우승</span></div>
+        <div class="m-score">6-4 6-2 7-6(5)</div>
+      </div>
+      <div class="match-row">
+        <div class="m-player">🇩🇪 알렉산더 즈베레프</div>
+        <div class="m-score"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 4 — 장비 가이드
+     ══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-equipment">
+  <div class="cont">
+    <div class="sub-nav" id="sn-equipment">
+      <button class="sub-btn active" onclick="switchSub('equipment','racket',this)">🎾 라켓</button>
+      <button class="sub-btn"        onclick="switchSub('equipment','string',this)">🧵 스트링</button>
+      <button class="sub-btn"        onclick="switchSub('equipment','shoes',this)">👟 신발</button>
+      <button class="sub-btn"        onclick="switchSub('equipment','combo',this)">⭐ 실력별 추천 조합</button>
+    </div>
+
+    <!-- 라켓 -->
+    <div class="sub-panel active" data-g="equipment" id="sp-equipment-racket">
+      <div class="sec-label">2025-26 추천 라켓</div>
+      <div class="equip-grid" id="racketGrid"></div>
+    </div>
+
+    <!-- 스트링 -->
+    <div class="sub-panel" data-g="equipment" id="sp-equipment-string">
+      <div class="sec-label">인기 스트링 가이드</div>
+      <div class="str-grid" id="stringGrid"></div>
+    </div>
+
+    <!-- 신발 -->
+    <div class="sub-panel" data-g="equipment" id="sp-equipment-shoes">
+      <div class="sec-label">코트별 추천 신발</div>
+      <div class="equip-grid equip-shoe-grid" id="shoeGrid"></div>
+    </div>
+
+    <!-- 실력별 추천 조합 -->
+    <div class="sub-panel" data-g="equipment" id="sp-equipment-combo">
+      <div class="sec-label">실력별 추천 장비 조합</div>
+      <div class="combo-grid" id="comboGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 — 자유게시판
+     ══════════════════════════════════════ -->
+<div class="tab-panel" id="tab-board">
+  <div class="cont">
+    <div class="board-layout">
+      <div>
+        <button class="write-btn" onclick="openModal('modalPost')">✏️ &nbsp; 글 작성하기</button>
+        <div id="postList"></div>
+      </div>
+      <div class="board-sidebar">
+        <div class="sb-card">
+          <div class="sb-title">카테고리 필터</div>
+          <div class="filter-btns">
+            <button class="filter-btn active" onclick="filterPosts('all',this)">전체</button>
+            <button class="filter-btn" onclick="filterPosts('free',this)">자유글</button>
+            <button class="filter-btn" onclick="filterPosts('qna',this)">질문/답변</button>
+            <button class="filter-btn" onclick="filterPosts('match',this)">대회후기</button>
+            <button class="filter-btn" onclick="filterPosts('lesson',this)">레슨후기</button>
+            <button class="filter-btn" onclick="filterPosts('gear',this)">장비리뷰</button>
+            <button class="filter-btn" onclick="filterPosts('club',this)">클럽모집</button>
+          </div>
+        </div>
+        <div class="sb-card">
+          <div class="sb-title">🔥 인기 태그</div>
+          <div id="hotTags" style="display:flex;flex-direction:column;gap:8px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ─ MODAL: 글쓰기 ─ -->
+<div class="modal-ov" id="modalPost">
+  <div class="modal-box" style="max-width:520px;">
+    <button class="modal-close" onclick="closeModal('modalPost')">✕</button>
+    <div class="modal-title">글 작성하기</div>
+    <div class="form-row2">
+      <div class="form-g">
+        <label class="form-lb">닉네임 *</label>
+        <input class="form-in" id="postAuthor" placeholder="테니스매니아" />
+      </div>
+      <div class="form-g">
+        <label class="form-lb">카테고리 *</label>
+        <select class="form-sel" id="postType">
+          <option value="free">자유글</option>
+          <option value="qna">질문/답변</option>
+          <option value="match">대회후기</option>
+          <option value="lesson">레슨후기</option>
+          <option value="gear">장비리뷰</option>
+          <option value="club">클럽모집</option>
+        </select>
+      </div>
+    </div>
+    <div class="form-g">
+      <label class="form-lb">태그 (쉼표 구분)</label>
+      <input class="form-in" id="postTags" placeholder="포핸드, 클레이코트, 초보자" />
+    </div>
+    <div class="form-g">
+      <label class="form-lb">내용 *</label>
+      <textarea class="form-ta" id="postContent" placeholder="테니스에 대해 자유롭게 이야기해보세요."></textarea>
+    </div>
+    <button class="modal-sub" onclick="addPost()">게시하기</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer class="site-footer">
+  ⓒ 2026 테니스 취미 노트 &nbsp;·&nbsp; 개인 취미 기록 및 소통 플랫폼 &nbsp;·&nbsp; 랭킹·뉴스 데이터는 참고용이며 실제와 다를 수 있습니다.
+</footer>
+
+<script>
+// ─ 유틸 ─
+function showToast(msg) { const t=document.getElementById('toast'); t.textContent=msg; t.style.display='block'; setTimeout(()=>t.style.display='none',2200); }
+function openModal(id)  { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+function load(k,d) { try { return JSON.parse(localStorage.getItem(k))||d; } catch{return d;} }
+function save(k,v) { localStorage.setItem(k,JSON.stringify(v)); }
+document.querySelectorAll('.modal-ov').forEach(ov=>ov.addEventListener('click',e=>{if(e.target===ov)ov.classList.remove('open');}));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.modal-ov.open').forEach(ov=>ov.classList.remove('open'));});
+
+// ─ 헤더 날짜 ─
+(function(){
+  const d=new Date();
+  document.getElementById('hDate').textContent = d.getFullYear()+'. '+String(d.getMonth()+1).padStart(2,'0')+'. '+String(d.getDate()).padStart(2,'0');
+})();
+
+// ─ 탭 전환 ─
+function switchTab(name) {
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  document.getElementById('tn-'+name).classList.add('active');
+  if(name==='ranking')  renderRanking();
+  if(name==='equipment')renderEquipment();
+  if(name==='board')    renderBoard();
+}
+
+// ─ 서브탭 전환 ─
+function switchSub(group, name, btn) {
+  document.getElementById('sn-'+group).querySelectorAll('.sub-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('[data-g="'+group+'"]').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('sp-'+group+'-'+name).classList.add('active');
+}
+
+// ═══════════════════════════════
+//  TAB 2 — 랭킹 데이터
+// ═══════════════════════════════
+const ATP = [
+  {nm:'야닉 시너',     en:'Jannik Sinner',     flag:'🇮🇹', pts:11880, form:'WWWWL'},
+  {nm:'카를로스 알카라스',en:'Carlos Alcaraz',  flag:'🇪🇸', pts:11245, form:'WLWWW'},
+  {nm:'알렉산더 즈베레프',en:'Alexander Zverev',flag:'🇩🇪', pts:8305,  form:'WWLWL'},
+  {nm:'노바크 조코비치',en:'Novak Djokovic',   flag:'🇷🇸', pts:7980,  form:'LWWLW'},
+  {nm:'다닐 메드베데프',en:'Daniil Medvedev',  flag:'🇷🇺', pts:7650,  form:'WLLWW'},
+  {nm:'카스퍼 루드',    en:'Casper Ruud',      flag:'🇳🇴', pts:6830,  form:'WWWLW'},
+  {nm:'테일러 프리츠',  en:'Taylor Fritz',     flag:'🇺🇸', pts:6415,  form:'LWWWL'},
+  {nm:'안드레이 루블레프',en:'Andrey Rublev',  flag:'🇷🇺', pts:5970,  form:'WWLWW'},
+  {nm:'토미 폴',       en:'Tommy Paul',        flag:'🇺🇸', pts:5650,  form:'LWWLW'},
+  {nm:'홀거 루네',     en:'Holger Rune',       flag:'🇩🇰', pts:5380,  form:'WLWWW'},
+  {nm:'벤 셸턴',       en:'Ben Shelton',       flag:'🇺🇸', pts:5170,  form:'WWLLW'},
+  {nm:'알렉스 드 미노르',en:'Alex de Minaur',  flag:'🇦🇺', pts:4980,  form:'WWWLW'},
+  {nm:'아르투어 필스',  en:'Arthur Fils',      flag:'🇫🇷', pts:4760,  form:'LWWWL'},
+  {nm:'세바스티안 바에스',en:'Sebastian Baez', flag:'🇦🇷', pts:4540,  form:'WWLWW'},
+  {nm:'그리고르 디미트로프',en:'Grigor Dimitrov',flag:'🇧🇬',pts:4320, form:'WLLWW'},
+];
+const WTA = [
+  {nm:'아리나 사발렌카',en:'Aryna Sabalenka',  flag:'🇧🇾', pts:10855, form:'WWWLW'},
+  {nm:'이가 스비아테크',en:'Iga Swiatek',      flag:'🇵🇱', pts:10230, form:'WLWWW'},
+  {nm:'코코 고프',     en:'Coco Gauff',        flag:'🇺🇸', pts:7685,  form:'WWLWW'},
+  {nm:'옐레나 리바키나',en:'Elena Rybakina',   flag:'🇰🇿', pts:7120,  form:'WWWWL'},
+  {nm:'정친원',        en:'Qinwen Zheng',      flag:'🇨🇳', pts:6890,  form:'LWWWW'},
+  {nm:'제시카 페굴라',  en:'Jessica Pegula',   flag:'🇺🇸', pts:6445,  form:'WWLWW'},
+  {nm:'엠마 나바로',   en:'Emma Navarro',      flag:'🇺🇸', pts:5640,  form:'WLWWW'},
+  {nm:'미라 안드레에바',en:'Mirra Andreeva',   flag:'🇷🇺', pts:5430,  form:'WWWLW'},
+  {nm:'바르보라 크레이치코바',en:'B. Krejcikova',flag:'🇨🇿',pts:5280, form:'LWWWL'},
+  {nm:'매디슨 키스',   en:'Madison Keys',      flag:'🇺🇸', pts:5120,  form:'WWLWW'},
+  {nm:'다리아 카사트키나',en:'Daria Kasatkina',flag:'🇷🇺', pts:4950,  form:'WLWWL'},
+  {nm:'마르케타 본드로우쇼바',en:'M. Vondrousova',flag:'🇨🇿',pts:4780,form:'LWWLW'},
+  {nm:'재스민 파올리니',en:'Jasmine Paolini',  flag:'🇮🇹', pts:4560,  form:'WWWLW'},
+  {nm:'다니엘 콜린스',  en:'Danielle Collins', flag:'🇺🇸', pts:4340,  form:'WLWWW'},
+  {nm:'폴라 바도사',   en:'Paula Badosa',      flag:'🇪🇸', pts:4180,  form:'LWWWL'},
+];
+const KR_PLAYERS = [
+  { nm:'권순우', en:'Soonwoo Kwon', flag:'🇰🇷', tour:'ATP', rank:128, icon:'🎾',
+    desc:'공격적인 포핸드 강타와 베이스라인 플레이를 앞세운 한국 남자 테니스 1위. 2021년 ATP 세계 랭킹 최고 81위를 기록했으며, 2026년 클레이 시즌 부활을 노리고 있다.' },
+  { nm:'이덕희', en:'Duckhee Lee', flag:'🇰🇷', tour:'ATP', rank:198, icon:'👂',
+    desc:'청각 장애를 극복하고 ATP 투어에서 활약하는 감동의 선수. 세계 최초 청각장애 ATP 투어 우승자로 2019년 뉴포트 오픈 우승. 강한 정신력과 서브가 무기.' },
+  { nm:'한나래', en:'Na-Lae Han', flag:'🇰🇷', tour:'WTA', rank:133, icon:'🌟',
+    desc:'한국 여자 테니스 대표주자. 안정적인 백핸드 슬라이스와 끈질긴 수비 테니스로 투어 상위권을 유지. ITF 투어 다수 우승 경력.' },
+  { nm:'장수정', en:'Su-Jeong Jang', flag:'🇰🇷', tour:'WTA', rank:162, icon:'🏃',
+    desc:'빠른 발놀림과 안정적인 스트로크를 바탕으로 꾸준히 WTA 투어에서 활약하는 한국의 신예. 클레이와 하드코트를 가리지 않는 올코트 플레이어.' },
+];
+
+function formDots(str) {
+  return str.split('').map(c=>`<div class="fd ${c==='W'?'w':'l'}"></div>`).join('');
+}
+function rankClass(i) { return i===0?'g':i===1?'s':i===2?'b':''; }
+
+function renderRankTable(data, tbodyId) {
+  document.getElementById(tbodyId).innerHTML = data.map((p,i)=>`
+    <tr>
+      <td><span class="rn ${rankClass(i)}">${i+1}</span></td>
+      <td><div class="p-nm">${p.nm}</div><div class="p-nat">${p.en}</div></td>
+      <td>${p.flag}</td>
+      <td class="r"><span class="pts">${p.pts.toLocaleString()}</span></td>
+      <td><div class="form-dots">${formDots(p.form)}</div></td>
+    </tr>`).join('');
+}
+
+function renderKrPlayers() {
+  document.getElementById('krGrid').innerHTML = KR_PLAYERS.map(p=>`
+    <div class="kr-card">
+      <div class="kr-hd">
+        <div class="kr-av">${p.icon}</div>
+        <div>
+          <div class="kr-nm">${p.flag} ${p.nm}</div>
+          <div class="kr-nm-en">${p.en}</div>
+          <div class="kr-tour">${p.tour} 투어</div>
+        </div>
+        <div style="margin-left:auto;text-align:right;">
+          <div class="kr-rank">${p.rank}</div>
+          <div class="kr-rlbl">세계 ${p.rank}위</div>
+        </div>
+      </div>
+      <div class="kr-desc">${p.desc}</div>
+    </div>`).join('');
+}
+
+function renderRanking() {
+  renderRankTable(ATP, 'atpBody');
+  renderRankTable(WTA, 'wtaBody');
+  renderKrPlayers();
+}
+
+// ═══════════════════════════════
+//  TAB 4 — 장비 데이터
+// ═══════════════════════════════
+const RACKETS = [
+  { brand:'Wilson', nm:'Pro Staff 97 v15', for:'컨트롤 중시 고급자', stars:'★★★★★',
+    specs:[{t:'97 sq in',c:'g'},{t:'315g',c:'g'},{t:'밸런스 31.5cm',c:'g'},{t:'컨트롤형',c:'r'}],
+    price:'약 380,000원', player:'전설적인 고급자용 컨트롤 라켓. 페더러가 오랜 기간 사용.' },
+  { brand:'Babolat', nm:'Pure Drive 2023', for:'파워·컨트롤 균형, 중급 이상',stars:'★★★★☆',
+    specs:[{t:'100 sq in',c:'g'},{t:'300g',c:'g'},{t:'밸런스 32cm',c:'g'},{t:'파워형',c:'r'}],
+    price:'약 320,000원', player:'나달, 루드 사용 브랜드. Cortex 기술로 진동 저감.' },
+  { brand:'Head', nm:'Speed Pro 2024', for:'올라운드 고급자',stars:'★★★★★',
+    specs:[{t:'100 sq in',c:'g'},{t:'310g',c:'g'},{t:'밸런스 32cm',c:'g'},{t:'올라운드',c:'b'}],
+    price:'약 350,000원', player:'조코비치가 사용하는 올라운드 고급 라켓. Graphene 360+.' },
+  { brand:'Yonex', nm:'EZONE 98 (2024)', for:'팔 부담 최소화, 중급 이상',stars:'★★★★☆',
+    specs:[{t:'98 sq in',c:'g'},{t:'305g',c:'g'},{t:'이소메트릭',c:'b'},{t:'소프트 타구감',c:'g'}],
+    price:'약 310,000원', player:'독특한 이소메트릭 형태로 스위트스폿이 넓고 팔꿈치 부담이 적음.' },
+  { brand:'Wilson', nm:'Clash 100 Pro v3', for:'초중급자 올라운드',stars:'★★★★☆',
+    specs:[{t:'100 sq in',c:'g'},{t:'310g',c:'g'},{t:'FreeFlex 기술',c:'b'},{t:'유연성 우수',c:'g'}],
+    price:'약 290,000원', player:'FreeFlex & StableSmart 기술. 유연성과 안정성을 동시에.' },
+  { brand:'Tecnifibre', nm:'TF-X1 305', for:'중급자 파워형',stars:'★★★☆☆',
+    specs:[{t:'100 sq in',c:'g'},{t:'305g',c:'g'},{t:'탄소 75%',c:'b'},{t:'파워형',c:'r'}],
+    price:'약 260,000원', player:'가성비 좋은 파워형 라켓. 탑스핀 생성에 유리한 프레임 설계.' },
+];
+
+const STRINGS = [
+  { nm:'ALU Power 125', brand:'Luxilon', color:'#C0C0C0',
+    ctrl:90, power:60, spin:70, comfort:40, str:'폴리에스터' },
+  { nm:'RPM Blast 125', brand:'Babolat', color:'#333',
+    ctrl:85, power:65, spin:95, comfort:45, str:'폴리에스터' },
+  { nm:'NXT 17', brand:'Wilson', color:'#F59E0B',
+    ctrl:70, power:85, spin:60, comfort:90, str:'멀티필라멘트' },
+  { nm:'X-One Biphase 17', brand:'Technifibre', color:'#E11D48',
+    ctrl:72, power:88, spin:65, comfort:88, str:'멀티필라멘트' },
+  { nm:'Poly Tour Spin 125', brand:'Yonex', color:'#7C3AED',
+    ctrl:82, power:68, spin:92, comfort:50, str:'폴리에스터' },
+  { nm:'Sensation 16', brand:'Babolat', color:'#059669',
+    ctrl:68, power:84, spin:62, comfort:86, str:'멀티필라멘트' },
+];
+
+const SHOES = [
+  { brand:'Nike', nm:'Air Zoom Vapor Pro 2', for:'하드코트 범용', stars:'★★★★★',
+    specs:[{t:'하드코트',c:'b'},{t:'경량',c:'g'},{t:'반응성',c:'g'}],
+    price:'약 160,000원', player:'프로 선수 다수 착용. 가볍고 반응이 빠름.' },
+  { brand:'Adidas', nm:'Barricade 13', for:'하드코트 내구성',stars:'★★★★☆',
+    specs:[{t:'하드코트',c:'b'},{t:'내구성',c:'g'},{t:'발목 지지',c:'g'}],
+    price:'약 150,000원', player:'강력한 내구성으로 장시간 훈련에 최적. 지지력 탁월.' },
+  { brand:'Babolat', nm:'Jet Mach 3 Clay', for:'클레이코트 전용',stars:'★★★★★',
+    specs:[{t:'클레이코트',c:'r'},{t:'허링본 패턴',c:'g'},{t:'경량',c:'g'}],
+    price:'약 140,000원', player:'클레이 전용 허링본 아웃솔. 슬라이딩과 그립의 완벽한 균형.' },
+  { brand:'Head', nm:'Sprint Pro 3.5 Clay',for:'클레이코트 컨트롤',stars:'★★★★☆',
+    specs:[{t:'클레이코트',c:'r'},{t:'안정성',c:'g'},{t:'내구성',c:'g'}],
+    price:'약 135,000원', player:'클레이에서의 안정적인 움직임과 내구성이 강점.' },
+  { brand:'Asics', nm:'Solution Speed FF 3', for:'잔디/하드 범용',stars:'★★★★☆',
+    specs:[{t:'잔디/하드',c:'g'},{t:'쿠셔닝',c:'g'},{t:'경량',c:'g'}],
+    price:'약 145,000원', player:'FlyteFoam 쿠셔닝으로 충격 흡수 우수. 잔디에서도 사용 가능.' },
+  { brand:'New Balance', nm:'Fresh Foam LAV v2',for:'올코트 편안함',stars:'★★★★☆',
+    specs:[{t:'올코트',c:'g'},{t:'쿠셔닝 최고',c:'g'},{t:'넓은 발볼',c:'b'}],
+    price:'약 138,000원', player:'Fresh Foam 쿠셔닝으로 장시간 착용 시 발 피로 최소화.' },
+];
+
+const COMBOS = [
+  { level:'begin', badge:'입문', title:'테니스 시작하기', period:'운동 기간 3개월 이내',
+    desc:'가볍고 관용성이 높은 장비로 부상 없이 기초를 다지세요. 이 시기엔 장비보다 몸이 먼저입니다.',
+    items:[
+      { icon:'🎾', cat:'라켓', nm:'Wilson Clash 100 Pro v3',
+        why:'유연한 FreeFlex 프레임이 팔꿈치 충격을 줄이고, 넓은 스위트스폿 덕분에 미스 샷에도 공이 잘 날아갑니다.' },
+      { icon:'🧵', cat:'스트링', nm:'Wilson NXT 17 (멀티필라멘트)',
+        why:'가장 부드러운 타구감으로 손목·팔꿈치 부담 최소화. 처음 몇 달은 편안한 스트링이 부상 예방의 핵심입니다.' },
+      { icon:'👟', cat:'신발', nm:'New Balance Fresh Foam LAV v2',
+        why:'두꺼운 쿠셔닝이 발·무릎 충격을 흡수합니다. 테니스 특유의 옆 움직임에 아직 익숙하지 않을 때 발목 보호가 중요합니다.' },
+    ],
+    tips:['헤드사이즈 100 sq in 이상, 무게 280g 이하 라켓 권장','스트링 텐션은 22~24kg으로 낮게 — 팔 부담이 확연히 줄어듭니다','런닝화 절대 금지 — 테니스 전용화만 착용해야 발목 부상을 예방합니다']
+  },
+  { level:'novice', badge:'초급', title:'폼 잡고 랠리 중', period:'운동 기간 6개월 ~ 2년',
+    desc:'기본 랠리가 이어지기 시작했다면 장비가 실력 향상을 뒷받침할 수 있습니다.',
+    items:[
+      { icon:'🎾', cat:'라켓', nm:'Babolat Pure Drive 2023',
+        why:'파워와 컨트롤의 균형이 뛰어나 초급 탈출에 딱 맞습니다. 중급 이후에도 계속 쓸 수 있어 비용 대비 효율이 좋습니다.' },
+      { icon:'🧵', cat:'스트링', nm:'Babolat X-One Biphase 17',
+        why:'멀티필라멘트이지만 컨트롤도 어느 정도 받쳐줘 초급 후반~중급 초입에 적합합니다. 폴리로 가기 전 좋은 디딤돌입니다.' },
+      { icon:'👟', cat:'신발', nm:'Asics Solution Speed FF 3',
+        why:'FlyteFoam 쿠셔닝으로 가볍고 접지력도 우수합니다. 빠른 스텝을 연습하는 초급자의 발놀림을 자연스럽게 도와줍니다.' },
+    ],
+    tips:['헤드사이즈 100 sq in, 무게 295~305g이 이상적인 초급 라켓 규격','폴리 스트링은 아직 이르다 — 팔이 단련되기 전 부상 위험이 높습니다','코트 타입(하드/클레이)에 맞는 전용 신발 교체를 검토하세요']
+  },
+  { level:'inter', badge:'중급', title:'스핀과 전술 개발', period:'운동 기간 2 ~ 5년',
+    desc:'자신만의 플레이스타일이 형성되는 시기. 장비를 플레이 패턴에 맞게 세팅하세요.',
+    items:[
+      { icon:'🎾', cat:'라켓', nm:'Head Speed Pro 2024 또는 Yonex EZONE 98',
+        why:'올라운드 공격형이면 Speed Pro, 스핀 컨트롤 중심이면 EZONE 98을 선택하세요. 두 모델 모두 팔 친화적입니다.' },
+      { icon:'🧵', cat:'스트링', nm:'Babolat RPM Blast 125 (폴리에스터)',
+        why:'본격 탑스핀 개발에 최적인 스트링입니다. 처음 폴리 도전 시 텐션을 22~24kg으로 낮게 시작하세요.' },
+      { icon:'👟', cat:'신발', nm:'Nike Air Zoom Vapor Pro 2',
+        why:'경량 + 빠른 반응성의 조합. 코트 커버리지를 높이려는 중급자의 발놀림을 가장 잘 뒷받침합니다.' },
+    ],
+    tips:['폴리 스트링 첫 시도는 텐션 22~24kg — 익숙해지면 조금씩 높이세요','헤드사이즈 98~100 sq in, 310g 전후가 중급자 표준 규격','하이브리드 세팅(주선 폴리 + 교차선 멀티)도 좋은 중간 선택입니다']
+  },
+  { level:'adv', badge:'고급', title:'퍼포먼스 극대화', period:'운동 기간 5년 이상',
+    desc:'섬세한 장비 세팅이 실전 경기력 차이를 만듭니다. 약점을 장비로 보완하세요.',
+    items:[
+      { icon:'🎾', cat:'라켓', nm:'Wilson Pro Staff 97 v15 또는 Head Speed Pro',
+        why:'컨트롤 게임 중심이면 Pro Staff, 파워+올라운드면 Speed Pro. 상대 전술에 따라 복수 라켓 보유도 추천합니다.' },
+      { icon:'🧵', cat:'스트링', nm:'Luxilon ALU Power 125 또는 Yonex Poly Tour Spin',
+        why:'ALU Power는 극강의 컨트롤, Poly Tour Spin은 회전량 극대화. 주선/교차선을 달리하는 하이브리드 세팅이 가장 효과적입니다.' },
+      { icon:'👟', cat:'신발', nm:'Adidas Barricade 13',
+        why:'집중 훈련과 대회를 병행하는 고급자에게 내구성이 핵심입니다. 강력한 발목 지지력으로 빠른 방향 전환 시에도 안정적입니다.' },
+    ],
+    tips:['하이브리드 추천: 주선 ALU Power 22kg + 교차선 NXT 24kg','라켓 2자루 이상 보유 후 동일 스트링·텐션 유지가 경기 일관성을 높입니다','장기 부상 예방을 위해 체중이동 지지력 중심의 테니스화를 우선 선택하세요']
+  },
+];
+
+function renderCombos() {
+  document.getElementById('comboGrid').innerHTML = COMBOS.map(c=>`
+    <div class="combo-card">
+      <div class="combo-hd">
+        <div class="combo-badge ${c.level}">${c.badge}</div>
+        <div class="combo-title">${c.title}</div>
+        <div class="combo-period">${c.period}</div>
+        <div class="combo-desc">${c.desc}</div>
+      </div>
+      <div class="combo-body">
+        ${c.items.map(it=>`
+        <div class="combo-item">
+          <div class="combo-icon">${it.icon}</div>
+          <div>
+            <div class="combo-item-cat">${it.cat}</div>
+            <div class="combo-item-nm">${it.nm}</div>
+            <div class="combo-item-why">${it.why}</div>
+          </div>
+        </div>`).join('')}
+        <div class="combo-tips">
+          <div class="combo-tips-title">💡 이 레벨에서 기억할 것</div>
+          <ul>${c.tips.map(t=>`<li>${t}</li>`).join('')}</ul>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+function renderEquipment() {
+  document.getElementById('racketGrid').innerHTML = RACKETS.map(r=>`
+    <div class="equip-card">
+      <div class="eq-brand">${r.brand}</div>
+      <div class="eq-nm">${r.nm}</div>
+      <div class="eq-for">${r.for}</div>
+      <div class="eq-specs">${r.specs.map(s=>`<span class="sp ${s.c==='b'?'blue':s.c==='r'?'red':''}">${s.t}</span>`).join('')}</div>
+      <div class="eq-stars">${r.stars}</div>
+      <div class="eq-price">${r.price}</div>
+      <div class="eq-player">${r.player}</div>
+    </div>`).join('');
+
+  document.getElementById('stringGrid').innerHTML = STRINGS.map(s=>`
+    <div class="str-card">
+      <div class="str-color" style="background:${s.color};"></div>
+      <div style="flex:1;">
+        <div class="str-nm">${s.nm}</div>
+        <div class="str-brand">${s.brand}</div>
+        ${[['컨트롤',s.ctrl],['파워',s.power],['스핀',s.spin],['편안함',s.comfort]].map(([lb,v])=>`
+        <div class="str-br">
+          <span class="str-bl">${lb}</span>
+          <div class="str-bw"><div class="str-bf" style="width:${v}%"></div></div>
+          <span style="font-size:11px;color:var(--gray-lt);width:28px;text-align:right;">${v}</span>
+        </div>`).join('')}
+        <span class="str-type">${s.str}</span>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('shoeGrid').innerHTML = SHOES.map(s=>`
+    <div class="equip-card">
+      <div class="eq-brand">${s.brand}</div>
+      <div class="eq-nm">${s.nm}</div>
+      <div class="eq-for">${s.for}</div>
+      <div class="eq-specs">${s.specs.map(sp=>`<span class="sp ${sp.c==='b'?'blue':sp.c==='r'?'red':''}">${sp.t}</span>`).join('')}</div>
+      <div class="eq-stars">${s.stars}</div>
+      <div class="eq-price">${s.price}</div>
+      <div class="eq-player">${s.player}</div>
+    </div>`).join('');
+
+  renderCombos();
+}
+
+// ═══════════════════════════════
+//  TAB 5 — 자유게시판
+// ═══════════════════════════════
+const TL = {free:'자유글',qna:'질문/답변',match:'대회후기',lesson:'레슨후기',gear:'장비리뷰',club:'클럽모집'};
+let posts = load('tennis_posts', [
+  { id:1, author:'테니스초보', type:'qna', tags:['포핸드','초보자'],
+    content:'포핸드를 칠 때 항상 네트에 걸리는데, 어떻게 하면 좋을까요? 라켓을 아래에서 위로 올린다는 게 감이 안 와요.',
+    date:'2026. 05. 11', likes:8, likedByMe:false, replies:[
+      {author:'고수투어러',text:'라켓 헤드를 공 아래에서 시작해서 빠르게 위로 쓸어올리세요. 탑스핀을 걸면 네트 마진이 생겨서 훨씬 안정적입니다!',date:'05.11'}]},
+  { id:2, author:'클레이킹', type:'match', tags:['대회','클레이코트'],
+    content:'주말에 지역 클럽 대회 나갔다가 준우승했어요! 클레이에서 슬라이딩 연습한 게 빛을 발했습니다. 결승에서 2세트까지 갔는데 체력이 딸렸네요. 다음엔 꼭 우승하겠습니다 💪',
+    date:'2026. 05. 10', likes:22, likedByMe:false, replies:[]},
+  { id:3, author:'라켓덕후', type:'gear', tags:['라켓리뷰','Yonex','EZONE'],
+    content:'요넥스 EZONE 98 두 달 사용 후기입니다. 팔꿈치 테니스엘보가 있는데 이 라켓으로 바꾼 뒤 통증이 확실히 줄었어요. 탑스핀도 잘 걸리고 스위트스폿이 넓어서 미스샷이 줄었습니다. 강추!',
+    date:'2026. 05. 08', likes:15, likedByMe:false, replies:[
+      {author:'테니스초보',text:'저도 테니스엘보 있는데 이 라켓 한번 써봐야겠네요!',date:'05.09'}]},
+  { id:4, author:'서울테니스클럽', type:'club', tags:['클럽모집','서울','주말'],
+    content:'[모집] 서울 강남구 테니스 클럽 회원 모집합니다! 🎾\n매주 토요일 오전 7~10시 운영\n실력: 중급 이상 (서브 안정적으로 넣을 수 있는 분)\n회비: 월 3만원 (코트비 포함)\n연락: 아래 댓글로 남겨주세요',
+    date:'2026. 05. 07', likes:9, likedByMe:false, replies:[]},
+]);
+let activeFilter = 'all';
+
+function renderBoard() {
+  const list = (activeFilter==='all' ? [...posts] : posts.filter(p=>p.type===activeFilter)).reverse();
+  document.getElementById('postList').innerHTML = list.length===0
+    ? `<div style="text-align:center;padding:60px;color:var(--gray-lt);"><div style="font-size:38px;margin-bottom:12px;opacity:.4">💬</div><div style="font-size:14px;">첫 번째 글을 작성해보세요!</div></div>`
+    : list.map(buildPost).join('');
+  renderHotTags();
+}
+
+function buildPost(p) {
+  const replies = (p.replies||[]).map(r=>`
+    <div class="reply-item">
+      <div class="reply-av">${r.author.charAt(0)}</div>
+      <div><div class="reply-author">${r.author}</div><div class="reply-txt">${r.text}</div><div class="reply-time">${r.date}</div></div>
+    </div>`).join('');
+  return `
+    <div class="post-card" id="pc-${p.id}">
+      <div class="post-hd">
+        <div class="post-av">${p.author.charAt(0)}</div>
+        <div><div class="post-author">${p.author}</div><div class="post-time">${p.date}</div></div>
+        <span class="post-badge type-${p.type}">${TL[p.type]}</span>
+      </div>
+      <div class="post-body">${p.content.replace(/\n/g,'<br>')}</div>
+      ${p.tags?.length?`<div class="post-tags">${p.tags.map(t=>`<span class="post-tag">${t}</span>`).join('')}</div>`:''}
+      <div class="post-ft">
+        <button class="like-btn${p.likedByMe?' liked':''}" onclick="toggleLike(${p.id})">❤ ${p.likes}</button>
+        <button class="reply-btn" onclick="toggleReplies(${p.id})">💬 댓글 ${(p.replies||[]).length}</button>
+      </div>
+      <div class="replies-sec" id="rs-${p.id}" style="display:none;">
+        <div id="rl-${p.id}">${replies}</div>
+        <div class="reply-inp-row">
+          <input class="reply-inp" id="ri-${p.id}" placeholder="댓글을 입력하세요..." />
+          <button class="reply-sub" onclick="addReply(${p.id})">등록</button>
+        </div>
+      </div>
+    </div>`;
+}
+
+function toggleLike(id) {
+  const p=posts.find(x=>x.id===id); if(!p) return;
+  p.likedByMe=!p.likedByMe; p.likes+=p.likedByMe?1:-1;
+  save('tennis_posts',posts); renderBoard();
+}
+function toggleReplies(id) { const el=document.getElementById('rs-'+id); if(el) el.style.display=el.style.display==='none'?'block':'none'; }
+function addReply(id) {
+  const inp=document.getElementById('ri-'+id);
+  const txt=inp?.value.trim(); if(!txt) return;
+  const p=posts.find(x=>x.id===id); if(!p) return;
+  if(!p.replies) p.replies=[];
+  const d=new Date();
+  p.replies.push({author:'나',text:txt,date:(d.getMonth()+1)+'.'+d.getDate()});
+  save('tennis_posts',posts); renderBoard();
+  setTimeout(()=>{const el=document.getElementById('rs-'+id);if(el)el.style.display='block';},30);
+}
+function filterPosts(type,btn) {
+  activeFilter=type;
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active'); renderBoard();
+}
+function renderHotTags() {
+  const cnt={};
+  posts.forEach(p=>(p.tags||[]).forEach(t=>{cnt[t]=(cnt[t]||0)+1;}));
+  const top=Object.entries(cnt).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  document.getElementById('hotTags').innerHTML = top.length===0
+    ? '<div style="color:var(--gray-lt);font-size:12px;">태그가 없습니다.</div>'
+    : top.map(([nm,c],i)=>`<div class="pop-item"><span class="pop-rank${i<3?' top':''}">${i+1}</span><span class="pop-nm">${nm}</span><span class="pop-cnt">${c}건</span></div>`).join('');
+}
+function addPost() {
+  const author=document.getElementById('postAuthor').value.trim();
+  const type=document.getElementById('postType').value;
+  const tagsRaw=document.getElementById('postTags').value.trim();
+  const content=document.getElementById('postContent').value.trim();
+  if(!author||!content){alert('닉네임과 내용을 입력해주세요.');return;}
+  const tags=tagsRaw?tagsRaw.split(',').map(t=>t.trim()).filter(Boolean):[];
+  const d=new Date();
+  const date=d.getFullYear()+'. '+String(d.getMonth()+1).padStart(2,'0')+'. '+String(d.getDate()).padStart(2,'0');
+  posts.push({id:Date.now(),author,type,tags,content,date,likes:0,likedByMe:false,replies:[]});
+  save('tennis_posts',posts);
+  closeModal('modalPost'); renderBoard();
+  showToast('게시글이 등록되었습니다.');
+  ['postAuthor','postTags','postContent'].forEach(id=>document.getElementById(id).value='');
+}
+
+// ─ 초기화 ─
+renderBoard();
+</script>
+</body>
+</html>
